@@ -5,9 +5,11 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Fade,
   Grid,
   makeStyles,
   Typography,
+  Zoom,
 } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import PropTypes from "prop-types";
@@ -55,48 +57,50 @@ function Image(props) {
   const { index, image, removeImage } = props;
   const classes = useStyles();
   return (
-    <Grid item xs={4} key={index}>
-      <Grid container>
-        <Card className={classes.root}>
-          <CardActionArea>
-            <CardMedia
-              className={classes.media}
-              image={image.urls.regular}
-              title="Ramdom Image"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                Food and Drink
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Lizards are a widespread group of squamate reptiles
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Grid container justify="space-between" alignItems="center">
-              <Grid item></Grid>
-              <Grid item>
-                <Button size="small" color="primary" variant="outlined">
-                  View
-                </Button>
+    <Zoom in>
+      <Grid item xs={4} key={index}>
+        <Grid container>
+          <Card className={classes.root}>
+            <CardActionArea>
+              <CardMedia
+                className={classes.media}
+                image={image.urls.regular}
+                title="Ramdom Image"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  Food and Drink
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  Lizards are a widespread group of squamate reptiles
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Grid container justify="space-between" alignItems="center">
+                <Grid item></Grid>
+                <Grid item>
+                  <Button size="small" color="primary" variant="outlined">
+                    View
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    size="small"
+                    color="secondary"
+                    onClick={() => {
+                      removeImage(index);
+                    }}
+                  >
+                    <DeleteForeverIcon />
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Button
-                  size="small"
-                  color="secondary"
-                  onClick={() => {
-                    removeImage(index);
-                  }}
-                >
-                  <DeleteForeverIcon />
-                </Button>
-              </Grid>
-            </Grid>
-          </CardActions>
-        </Card>
+            </CardActions>
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
+    </Zoom>
   );
 }
 

@@ -1,8 +1,4 @@
-import {
-  CircularProgress,
-  FormControl,
-  FormHelperText,
-} from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -11,14 +7,16 @@ import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
+import MaterialLink from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { useFormik } from "formik";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import * as Yup from "yup";
 import firebase from "../config/firebase";
-import MaterialLink from "@material-ui/core/Link";
 
 function Copyright() {
   return (
@@ -53,42 +51,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignUp() {
   const classes = useStyles();
+  const history = useHistory();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [form, setForm] = useState({ email: "", password: "" });
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  function handleForm(e) {
-    e.preventDefault();
-    if (isLoading) return;
-
-    setIsLoading(true);
-    console.log("----submit----");
-    if (form.password === "" || form.email === "") return;
-
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(form.email, form.password)
-      .then((res) => {
-        // setIsLoggedIn(true);
-        setIsLoading(false);
-        setError("");
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        setError(error.message);
-      });
-  }
-
-  function handleInput(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setForm({ ...form, [name]: value });
-  }
+  const formik = useFormik({
+    initialValues: { email: "", password: "", passwordConfirm: "" },
+    onSubmit: (value, formikBag) => {
+      //   console.log("Formik: ", value);
+      setIsLoading(true);
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(value.email, value.password)
+        .then((res) => {
+          setIsLoading(false);
+          history.replace("/");
+        })
+        .catch((e) => {
+          setIsLoading(false);
+          formikBag.setFieldError("email", e.message);
+        });
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required("Email is required!")
+        .email("Invalid email address!"),
+      password: Yup.string()
+        .required("Password is required!")
+        .min(6, "Password must be at least 6 characters"),
+      passwordConfirm: Yup.string()
+        .required("Password confirm is required!")
+        .oneOf([Yup.ref("password"), null], "Password does't match"),
+    }),
+  });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -98,39 +95,61 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign Up
         </Typography>
 
-        <form className={classes.form} noValidate onSubmit={handleForm}>
-          <FormControl component="fieldset" error={error !== ""}>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={formik.handleSubmit}
+        >
+          {/*<FormControl component="fieldset" error={error !== ""}>
             <FormHelperText>{error}</FormHelperText>
-          </FormControl>
+  </FormControl>*/}
 
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
             label="Email Address"
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={handleInput}
-            value={form.email}
+            {...formik.getFieldProps("email")}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={handleInput}
-            value={form.password}
+            {...formik.getFieldProps("password")}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Password Confirm"
+            type="password"
+            id="passwordConfirm"
+            autoComplete="current-password"
+            {...formik.getFieldProps("passwordConfirm")}
+            error={
+              formik.touched.passwordConfirm &&
+              Boolean(formik.errors.passwordConfirm)
+            }
+            helperText={
+              formik.touched.passwordConfirm && formik.errors.passwordConfirm
+            }
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -148,17 +167,14 @@ export default function SignIn() {
             {isLoading ? (
               <CircularProgress size={24} color="primary" />
             ) : (
-              "Sign In"
+              "Sign Up"
             )}
           </Button>
 
-          <Grid container>
-            <Grid item xs>
-              <MaterialLink variant="body2">Forgot password?</MaterialLink>
-            </Grid>
+          <Grid container justify="center">
             <Grid item>
-              <Link to="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link to="/login" variant="body2">
+                {"Already have an account? Sign In"}
               </Link>
             </Grid>
           </Grid>
