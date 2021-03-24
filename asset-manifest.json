@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/reactjs-photo-album-app/static/css/main.68eb9308.chunk.css",
+    "main.js": "/reactjs-photo-album-app/static/js/main.11af1fe7.chunk.js",
+    "main.js.map": "/reactjs-photo-album-app/static/js/main.11af1fe7.chunk.js.map",
+    "runtime-main.js": "/reactjs-photo-album-app/static/js/runtime-main.6342959d.js",
+    "runtime-main.js.map": "/reactjs-photo-album-app/static/js/runtime-main.6342959d.js.map",
+    "static/js/2.dc33cd7c.chunk.js": "/reactjs-photo-album-app/static/js/2.dc33cd7c.chunk.js",
+    "static/js/2.dc33cd7c.chunk.js.map": "/reactjs-photo-album-app/static/js/2.dc33cd7c.chunk.js.map",
+    "index.html": "/reactjs-photo-album-app/index.html",
+    "static/css/main.68eb9308.chunk.css.map": "/reactjs-photo-album-app/static/css/main.68eb9308.chunk.css.map",
+    "static/js/2.dc33cd7c.chunk.js.LICENSE.txt": "/reactjs-photo-album-app/static/js/2.dc33cd7c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6342959d.js",
+    "static/js/2.dc33cd7c.chunk.js",
+    "static/css/main.68eb9308.chunk.css",
+    "static/js/main.11af1fe7.chunk.js"
+  ]
+}
